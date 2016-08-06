@@ -1,0 +1,8 @@
+[package]
+name = "learnopengl"
+version = "0.0.1"
+authors = ["clstl <reamles@gmail.com>"]
+
+[dependencies]
+glium = "*"
+cgmath = "*"
