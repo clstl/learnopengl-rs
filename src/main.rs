@@ -1,6 +1,7 @@
 #[macro_use]
 extern crate glium;
 extern crate time;
+extern crate cgmath;
 extern crate image;
 
 use std::string::String;
@@ -9,6 +10,8 @@ use glium::glutin::{Api};
 use glium::glutin::Event::{Closed, KeyboardInput};
 use glium::glutin::VirtualKeyCode;
 use glium::glutin::GlRequest;
+
+use cgmath::{Matrix4, Rad};
 
 use std::io::Cursor;
 
@@ -59,15 +62,23 @@ fn main() {
 
     let texture = glium::texture::Texture2d::new(&display, image).unwrap();
 
+    //Transformations
+    let mut trans: Matrix4<f32> = cgmath::Matrix4::from_translation(cgmath::Vector3::new(0.5, -0.5, 0.0));
+
     loop {
         let time_value = time::precise_time_s() as f32;
         let green: f32 = time_value.sin()/2.0f32 + 0.5f32;
         let our_color: [f32; 4] = [0.0,green,0.0,1.0];
+        trans = trans * cgmath::Matrix4::from_angle_z(Rad::new(std::f32::consts::PI/1000.0));
+        let transformation: [[f32; 4]; 4] = trans.into();
+
+        let uniforms = uniform!{ourColor: our_color,
+            tex: &texture,
+            transformation: transformation};
 
         let mut target = display.draw();
         target.clear_color(0.1, 0.3, 0.3, 1.0);
-        target.draw(&vertex_buffer, &indices, &program, &uniform!{ourColor: our_color,
-            tex: &texture},
+        target.draw(&vertex_buffer, &indices, &program, &uniforms,
             &Default::default()).unwrap();
         target.finish().unwrap();
 
