@@ -1,9 +1,11 @@
 #version 330 core
-  in vec4 vertexColor; // The input variable from the vertex shader (same name and same type)
-  uniform vec4 ourColor;
-  out vec4 color;
+in vec3 outColor;
+in vec2 outTexture;
 
-  void main()
-  {
-      color = vertexColor;
-  }
+out vec4 color;
+uniform sampler2D tex;
+
+void main()
+{
+  color = texture(tex, outTexture);
+}
