@@ -6,3 +6,4 @@ authors = ["clstl <reamles@gmail.com>"]
 [dependencies]
 glium = "*"
 cgmath = "*"
+time = "0.1"
